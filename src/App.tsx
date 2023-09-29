@@ -1,11 +1,15 @@
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import Auth from "./components/Auth";
+import Home from "./components/Home";
 
 function App() {
   return (
     <>
-      <h1 className="text-3xl font-bold">
-        Blog editor for admins to manage posts.
-      </h1>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Auth />} />
+      </Routes>
     </>
   );
 }
