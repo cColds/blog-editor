@@ -43,6 +43,8 @@ function Home() {
         {isLoggedIn ? `Welcome, ${user?.username}!` : "You are not logged in"}
       </h2>
       {!isLoggedIn && <Link to="/login">Login</Link>}
+
+      {isLoggedIn && <Link to="/blogs">View blogs</Link>}
     </div>
   );
 }
