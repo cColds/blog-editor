@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Modal from "react-modal";
 import checkAuth from "../utils/checkAuth";
 
 type BlogType = {
@@ -21,9 +22,53 @@ type BlogType = {
   published: boolean;
 };
 
+const customStyles = {
+  overlay: { backgroundColor: "rgba(0, 0, 0, 0.3)" },
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "black",
+    borderColor: "rgb(60, 60, 60)",
+    maxWidth: "450px",
+  },
+};
+
+// Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement("#root");
+
 function Blogs() {
   const [blogs, setBlogs] = useState<BlogType[] | []>([]);
+  const [targetBlog, setTargetBlog] = useState<BlogType | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleDeleteBlog = async () => {
+    const blogId = targetBlog?._id || "";
+    console.log(blogId);
+    try {
+      const res = await fetch("http://localhost:3000/api/blogs/" + blogId, {
+        method: "DELETE",
+      });
+
+      console.log(await res.text());
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const openModal = (blog: BlogType) => {
+    setIsModalOpen(true);
+    setTargetBlog(blog);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTargetBlog(null);
+  };
 
   useEffect(() => {
     (async () => {
@@ -35,7 +80,6 @@ function Blogs() {
 
       const res = await fetch("http://localhost:3000/api/blogs");
       const allBlogs = await res.json();
-      console.log(allBlogs);
       setBlogs(allBlogs);
     })();
   }, [navigate]);
@@ -48,7 +92,12 @@ function Blogs() {
           return (
             <div className="flex flex-col gap-2" key={blog._id}>
               <div className="flex gap-2 justify-end text-sm">
-                <button className="bg-red-800 border-0">Delete</button>
+                <button
+                  className="bg-red-800 border-0 hover:bg-red-900 transition ease-in-out"
+                  onClick={() => openModal(blog)}
+                >
+                  Delete
+                </button>
                 <button>Edit</button>
               </div>
 
@@ -80,6 +129,38 @@ function Blogs() {
           );
         })}
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Delete Modal"
+      >
+        <h1 className="text-xl mb-2">Delete Modal</h1>
+
+        <div className="flex flex-col gap-4">
+          <p className="text-slate-300">
+            Are you sure you want to delete{" "}
+            <span className="font-bold">{targetBlog?.title}</span>? This action
+            cannot be undone.
+          </p>
+          <div className="flex gap-2 ml-auto text-sm">
+            <button className="bg-transparent" onClick={closeModal}>
+              Cancel
+            </button>
+            <button
+              className="bg-red-800 border-0 hover:bg-red-900 transition ease-in-out"
+              onClick={async () => {
+                await handleDeleteBlog();
+                closeModal();
+                navigate(0);
+              }}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
