@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import BlogType from "../types/Blog";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 type DeleteModalType = {
   isModalOpen: boolean;
@@ -29,7 +31,10 @@ function DeleteModal({
       style={customStyles}
       contentLabel="Delete Blog"
     >
-      <h1 className="text-xl mb-2">Delete Blog</h1>
+      <header className="flex gap-2 items-center mb-2 text-xl">
+        <FontAwesomeIcon icon={faCircleExclamation} className="text-red-800" />
+        <h1 className="">Delete Blog</h1>
+      </header>
 
       <div className="flex flex-col gap-4">
         <p className="text-slate-300">
