@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import checkAuth from "../utils/checkAuth";
+import axios from "axios";
 
 type User = {
   username: string;
@@ -16,11 +17,11 @@ function Home() {
     const cachedUser = localStorage.getItem("username") || "";
     const query = new URLSearchParams({ username: cachedUser });
 
-    const res = await fetch("http://localhost:3000/api/user?" + query, {
+    const res = await axios.get("http://localhost:3000/api/user?" + query, {
       headers: { authorization: `Bearer ${token}` },
     });
 
-    const userData = await res.json();
+    const userData = await res.data;
     return userData;
   };
 

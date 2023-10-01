@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import checkAuth from "../utils/checkAuth";
+import axios from "axios";
 
 type BlogType = {
   _id: string;
@@ -50,11 +51,11 @@ function Blogs() {
     const blogId = targetBlog?._id || "";
     console.log(blogId);
     try {
-      const res = await fetch("http://localhost:3000/api/blogs/" + blogId, {
-        method: "DELETE",
-      });
+      const res = await axios.delete(
+        "http://localhost:3000/api/blogs/" + blogId
+      );
 
-      console.log(await res.text());
+      console.log(await res.data);
     } catch (e) {
       console.error(e);
     }
@@ -78,8 +79,8 @@ function Blogs() {
         navigate("/");
       }
 
-      const res = await fetch("http://localhost:3000/api/blogs");
-      const allBlogs = await res.json();
+      const res = await axios.get("http://localhost:3000/api/blogs");
+      const allBlogs = res.data;
       setBlogs(allBlogs);
     })();
   }, [navigate]);

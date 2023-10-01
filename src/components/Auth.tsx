@@ -1,6 +1,7 @@
 import { useState, FormEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import checkAuth from "../utils/checkAuth";
+import axios from "axios";
 
 function Auth() {
   const [username, setUsername] = useState("");
@@ -21,18 +22,13 @@ function Auth() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = { username, password };
-    const data = new URLSearchParams(formData);
-
     try {
-      const res = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        body: data,
+      const res = await axios.post("http://localhost:3000/api/login", {
+        username,
+        password,
       });
 
-      if (!res.ok) throw new Error("Username or password is invalid");
-
-      const { token } = await res.json();
+      const { token } = await res.data;
       localStorage.setItem("token", token);
       localStorage.setItem("username", username);
 
@@ -42,9 +38,7 @@ function Auth() {
       navigate("/");
     } catch (e) {
       console.error(e);
-      if (e instanceof Error) {
-        setErrorMessage(e.message);
-      }
+      setErrorMessage("Username or password is invalid");
     }
   };
 
