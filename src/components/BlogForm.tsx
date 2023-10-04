@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import BlogType from "../types/Blog";
 import axios from "axios";
+import BlogType from "../types/Blog";
 import CircleSpinner from "./CircleSpinner";
+import notifyToast from "../utils/notifyToast";
 
 type FormError = {
   type: string;
@@ -83,13 +84,16 @@ function BlogForm({
       );
 
       setErrors({});
+      notifyToast("Blog edited successfully", "success");
       closeModal();
       fetchBlogs();
+      console.log("yo");
     } catch (err) {
       if (!axios.isAxiosError(err)) throw err;
 
       const errors = err.response?.data;
       console.error(err.message);
+      notifyToast(err.message, "error");
 
       if (errors) {
         const errorsList: { [key: string]: FormError } = {};

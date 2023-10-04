@@ -7,6 +7,9 @@ import BlogType from "../types/Blog";
 import Blog from "./Blog";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import notifyToast from "../utils/notifyToast";
 
 const customStyles = {
   overlay: { backgroundColor: "rgba(0, 0, 0, 0.3)" },
@@ -47,10 +50,14 @@ function Blogs() {
         "http://localhost:3000/api/blogs/" + blogId,
         config,
       );
+      notifyToast("Deleted blog successfully", "success");
 
       console.log(res.data);
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      if (err instanceof Error) {
+        notifyToast(err.message, "error");
+      }
+      console.error(err);
     }
   };
 
@@ -131,6 +138,19 @@ function Blogs() {
           fetchBlogs={fetchBlogs}
         />
       )}
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }

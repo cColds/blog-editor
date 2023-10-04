@@ -57,3 +57,8 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+svg {
+  height: 24px;
+  width: 24px;
+}
