@@ -3,21 +3,23 @@ import BlogType from "../types/Blog";
 
 function Blog({
   blog,
-  onOpenModal,
+  onOpenDeleteModal,
+  onOpenEditModal,
 }: {
   blog: BlogType;
-  onOpenModal: (blog: BlogType) => void;
+  onOpenDeleteModal: (blog: BlogType) => void;
+  onOpenEditModal: (blog: BlogType) => void;
 }) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-2 justify-end text-sm">
         <button
           className="bg-red-800 border-0 hover:bg-red-900 transition ease-in-out"
-          onClick={() => onOpenModal(blog)}
+          onClick={() => onOpenDeleteModal(blog)}
         >
           Delete
         </button>
-        <button>Edit</button>
+        <button onClick={() => onOpenEditModal(blog)}>Edit</button>
       </div>
 
       <article className="flex flex-col gap-2">

@@ -42,7 +42,8 @@ button {
   transition: border-color 0.25s;
 }
 
-input {
+input,
+textarea {
   padding: 6px;
   border-radius: 5px;
   color: black;
