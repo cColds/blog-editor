@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import checkAuth from "../utils/checkAuth";
@@ -48,7 +48,7 @@ function Blogs() {
         config,
       );
 
-      console.log(await res.data);
+      console.log(res.data);
     } catch (e) {
       console.error(e);
     }
@@ -74,6 +74,16 @@ function Blogs() {
     setTargetBlog(null);
   };
 
+  const fetchBlogs = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/blogs");
+      const allBlogs = res.data;
+      setBlogs(allBlogs);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
   useEffect(() => {
     (async () => {
       const isLoggedIn = await checkAuth();
@@ -82,15 +92,13 @@ function Blogs() {
         navigate("/");
       }
 
-      const res = await axios.get("http://localhost:3000/api/blogs");
-      const allBlogs = res.data;
-      setBlogs(allBlogs);
+      fetchBlogs();
     })();
-  }, [navigate]);
+  }, [navigate, fetchBlogs]);
 
   return (
-    <div className="max-w-7xl flex flex-col p-8 w-full">
-      <h1 className="text-3xl font-bold mb-6">Blogs</h1>
+    <div className="flex w-full max-w-7xl flex-col p-8">
+      <h1 className="mb-6 text-3xl font-bold">Blogs</h1>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
         {blogs.map((blog) => {
           return (
@@ -110,6 +118,7 @@ function Blogs() {
           onDeleteBlog={handleDeleteBlog}
           targetBlog={targetBlog}
           customStyles={customStyles}
+          fetchBlogs={fetchBlogs}
         />
       )}
 
@@ -119,6 +128,7 @@ function Blogs() {
           closeModal={closeEditModal}
           targetBlog={targetBlog}
           customStyles={customStyles}
+          fetchBlogs={fetchBlogs}
         />
       )}
     </div>

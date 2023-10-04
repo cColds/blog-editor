@@ -16,9 +16,11 @@ type AllowedErrorKeys = "title" | "body" | "published" | "image";
 function BlogForm({
   closeModal,
   targetBlog,
+  fetchBlogs,
 }: {
   closeModal: () => void;
   targetBlog: BlogType | null;
+  fetchBlogs: () => Promise<void>;
 }) {
   const [title, setTitle] = useState(targetBlog?.title || "");
   const [body, setBody] = useState(targetBlog?.body || "");
@@ -82,9 +84,9 @@ function BlogForm({
 
       setErrors({});
       closeModal();
+      fetchBlogs();
     } catch (err) {
-      if (!axios.isAxiosError(err))
-        throw new Error("Non-axios error (invalid form prob)");
+      if (!axios.isAxiosError(err)) throw err;
 
       const errors = err.response?.data;
       console.error(err.message);

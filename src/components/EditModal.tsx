@@ -10,6 +10,7 @@ type EditModalType = {
     overlay: React.CSSProperties;
     content: React.CSSProperties;
   };
+  fetchBlogs: () => Promise<void>;
 };
 
 function EditModal({
@@ -17,6 +18,7 @@ function EditModal({
   closeModal,
   targetBlog,
   customStyles,
+  fetchBlogs,
 }: EditModalType) {
   return (
     <Modal
@@ -29,7 +31,11 @@ function EditModal({
         <h1 className="">Edit Blog</h1>
       </header>
 
-      <BlogForm closeModal={closeModal} targetBlog={targetBlog} />
+      <BlogForm
+        closeModal={closeModal}
+        targetBlog={targetBlog}
+        fetchBlogs={fetchBlogs}
+      />
     </Modal>
   );
 }

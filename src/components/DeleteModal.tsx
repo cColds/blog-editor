@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import BlogType from "../types/Blog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,6 +12,7 @@ type DeleteModalType = {
     overlay: React.CSSProperties;
     content: React.CSSProperties;
   };
+  fetchBlogs: () => Promise<void>;
 };
 
 function DeleteModal({
@@ -21,9 +21,8 @@ function DeleteModal({
   onDeleteBlog,
   targetBlog,
   customStyles,
+  fetchBlogs,
 }: DeleteModalType) {
-  const navigate = useNavigate();
-
   return (
     <Modal
       isOpen={isModalOpen}
@@ -31,7 +30,7 @@ function DeleteModal({
       style={customStyles}
       contentLabel="Delete Blog"
     >
-      <header className="flex gap-2 items-center mb-2 text-xl">
+      <header className="mb-2 flex items-center gap-2 text-xl">
         <FontAwesomeIcon icon={faCircleExclamation} className="text-red-800" />
         <h1 className="">Delete Blog</h1>
       </header>
@@ -42,16 +41,16 @@ function DeleteModal({
           <span className="font-bold">{targetBlog?.title}</span>? This action
           cannot be undone.
         </p>
-        <div className="flex gap-2 ml-auto text-sm">
+        <div className="ml-auto flex gap-2 text-sm">
           <button className="bg-transparent" onClick={closeModal}>
             Cancel
           </button>
           <button
-            className="bg-red-800 border-0 hover:bg-red-900 transition ease-in-out"
+            className="border-0 bg-red-800 transition ease-in-out hover:bg-red-900"
             onClick={async () => {
               await onDeleteBlog();
               closeModal();
-              navigate(0);
+              fetchBlogs();
             }}
           >
             Confirm
