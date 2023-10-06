@@ -7,8 +7,6 @@ import BlogType from "../types/Blog";
 import Blog from "./Blog";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import notifyToast from "../utils/notifyToast";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -147,19 +145,6 @@ function Blogs() {
           fetchBlogs={fetchBlogs}
         />
       )}
-
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </div>
   );
 }

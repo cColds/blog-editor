@@ -5,6 +5,7 @@ import axios from "axios";
 import SubmitFormError from "../types/SubmitFormError";
 import BlogForm from "./BlogForm";
 import blogFormReducer from "./reducers/blogFormReducer";
+import notifyToast from "../utils/notifyToast";
 
 function NewBlog() {
   const [state, dispatch] = useReducer(blogFormReducer, {
@@ -47,6 +48,7 @@ function NewBlog() {
       };
 
       await axios.post("http://localhost:3000/api/blogs/", formData, config);
+      notifyToast("Blog created successfully!", "success");
 
       navigate("/blogs");
     } catch (err) {
@@ -54,6 +56,7 @@ function NewBlog() {
 
       const errors: SubmitFormError[] = err.response?.data;
       dispatch({ type: "submit_form_errors", payload: { errors } });
+      notifyToast(err.message, "error");
       console.error(err);
     } finally {
       setLoading(false);
