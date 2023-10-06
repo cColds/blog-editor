@@ -62,3 +62,8 @@ svg {
   height: 24px;
   width: 24px;
 }
+
+img {
+  width: 100%;
+  object-fit: cover;
+}
