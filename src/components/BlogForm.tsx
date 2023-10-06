@@ -1,261 +1,131 @@
-import React, { useState } from "react";
-import axios from "axios";
-import BlogType from "../types/Blog";
+import BlogFormType from "../types/BlogForm";
+import BlogFormAction from "../types/BlogFormAction";
 import CircleSpinner from "./CircleSpinner";
-import notifyToast from "../utils/notifyToast";
 
-type FormError = {
-  type: string;
-  value: string;
-  msg: string;
-  path: string;
-  location: string;
+type BlogFormArgs = {
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  isLoading: boolean;
+  operation: "CREATE" | "EDIT";
+  closeModal?: () => void;
+  state: BlogFormType;
+  dispatch: React.Dispatch<BlogFormAction>;
 };
 
-type AllowedErrorKeys = "title" | "body" | "published" | "image";
-
 function BlogForm({
+  handleSubmit,
+  isLoading,
+  operation,
   closeModal,
-  targetBlog,
-  fetchBlogs,
-}: {
-  closeModal: () => void;
-  targetBlog: BlogType | null;
-  fetchBlogs: () => Promise<void>;
-}) {
-  const [title, setTitle] = useState(targetBlog?.title || "");
-  const [body, setBody] = useState(targetBlog?.body || "");
-  const [published, setPublished] = useState(Boolean(targetBlog?.published));
-  const [image, setImage] = useState<null | File>(null);
-  const [errors, setErrors] = useState<
-    { [k in AllowedErrorKeys]?: FormError } | Record<string, never>
-  >({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (files?.length) {
-      try {
-        setImage(files[0]);
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      setImage(null);
-    }
-    handleErrors(e);
-  };
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-    handleErrors(e);
-  };
-
-  const handleBodyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setBody(e.target.value);
-    handleErrors(e);
-  };
-
-  const handlePublishedChange = () => setPublished(!published);
-
-  const handleEditBlog = async () => {
-    if (targetBlog == null) throw new Error("Can't edit blog of type null");
-
-    setIsLoading(true);
-
-    try {
-      const blogId = targetBlog._id;
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("body", body);
-      formData.append("published", published.toString());
-      if (image) formData.append("image", image);
-      else formData.append("image", targetBlog.img);
-
-      const token = localStorage.getItem("token");
-      const config = {
-        headers: { authorization: `Bearer ${token}` },
-      };
-
-      await axios.put(
-        "http://localhost:3000/api/blogs/" + blogId,
-        formData,
-        config,
-      );
-
-      setErrors({});
-      notifyToast("Blog edited successfully", "success");
-      closeModal();
-      fetchBlogs();
-      console.log("yo");
-    } catch (err) {
-      if (!axios.isAxiosError(err)) throw err;
-
-      const errors = err.response?.data;
-      console.error(err.message);
-      notifyToast(err.message, "error");
-
-      if (errors) {
-        const errorsList: { [key: string]: FormError } = {};
-
-        errors.forEach((error: FormError) => {
-          errorsList[error.path] = error;
-        });
-
-        setErrors(errorsList);
-      }
-
-      console.error(err instanceof Error && err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const getError = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    switch (e.target.name) {
-      case "title":
-      case "body": {
-        if (!e.target.value.trim()) return `${e.target.name} cannot be empty`;
-
-        break;
-      }
-
-      case "image": {
-        if (!(e.target instanceof HTMLInputElement)) return;
-        const { files } = e.target;
-        if (!files?.length) return "Image is required";
-
-        if (!files[0].name.match(/\.(jpg|jpeg|png|avif|webp)$/i))
-          return "File extension must be .webp, .png, .jpg/jpeg, or .avif";
-
-        break;
-      }
-
-      default:
-        console.log("No errors found");
-    }
-
-    return false;
-  };
-
-  const handleErrors = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const errorMsg = getError(e);
-    if (!errorMsg) {
-      const updatedErrors = structuredClone(errors);
-      delete updatedErrors[e.target.name];
-      setErrors(updatedErrors);
-
-      return;
-    }
-
-    const errorField = {
-      type: "field",
-      value: e.target.value,
-      msg: errorMsg,
-      path: e.target.name,
-      location: "body",
-    };
-
-    setErrors({ ...errors, [e.target.name]: errorField });
-  };
-
+  state,
+  dispatch,
+}: BlogFormArgs) {
   return (
     <form
+      className="flex w-full max-w-2xl flex-col gap-3"
       encType="multipart/form-data"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleEditBlog();
-      }}
+      onSubmit={handleSubmit}
     >
-      <div className="flex flex-col gap-3">
-        <label className="flex flex-col gap-1.5">
-          Title
-          <input
-            type="text"
-            name="title"
-            placeholder="Title"
-            value={title}
-            onChange={handleTitleChange}
-            required
-          />
-        </label>
-        {errors.title && (
-          <p className="text-sm text-red-600 first-letter:uppercase">
-            {errors.title.msg}
-          </p>
-        )}
+      <label className="flex flex-col gap-1.5">
+        Title
+        <input
+          type="text"
+          name="title"
+          placeholder="e.g. Clean Code Architecture"
+          value={state.title}
+          onChange={(e) =>
+            dispatch({
+              type: "update_title",
+              payload: { value: e.target.value },
+            })
+          }
+          required
+        />
+      </label>
+      {state.errors.title && (
+        <p className="text-sm text-red-600 first-letter:uppercase">
+          {state.errors.title}
+        </p>
+      )}
 
-        <label className="flex flex-col gap-1.5">
-          Body
-          <textarea
-            name="body"
-            placeholder="Body"
-            rows={4}
-            value={body}
-            onChange={handleBodyChange}
-            required
-          ></textarea>
-        </label>
-        {errors.body && (
-          <p className="text-sm text-red-600 first-letter:uppercase">
-            {errors.body.msg}
-          </p>
-        )}
+      <label className="flex flex-col gap-1.5">
+        Body
+        <textarea
+          name="body"
+          placeholder="Once upon a time..."
+          rows={4}
+          value={state.body}
+          onChange={(e) =>
+            dispatch({
+              type: "update_body",
+              payload: { value: e.target.value },
+            })
+          }
+          required
+        ></textarea>
+      </label>
+      {state.errors.body && (
+        <p className="text-sm text-red-600 first-letter:uppercase">
+          {state.errors.body}
+        </p>
+      )}
 
-        <label className="flex gap-2.5">
-          Published?
-          <input
-            type="checkbox"
-            title="Published?"
-            className="scale-125"
-            checked={published}
-            onChange={handlePublishedChange}
-          />
-        </label>
-        {errors.published && (
-          <p className="text-sm text-red-600 first-letter:uppercase">
-            {errors.published.msg}
-          </p>
-        )}
+      <label className="flex gap-2.5">
+        Published?
+        <input
+          type="checkbox"
+          title="Published?"
+          className="scale-125"
+          checked={state.published}
+          onChange={() =>
+            dispatch({
+              type: "toggle_published",
+              payload: { checked: state.published },
+            })
+          }
+        />
+      </label>
 
-        <label className="flex flex-col gap-2.5">
-          Blog Image
-          <input
-            type="file"
-            onChange={handleImageChange}
-            className="w-full p-0 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 
+      <label className="flex flex-col gap-2.5">
+        Cover
+        <input
+          type="file"
+          onChange={(e) => {
+            console.log(e.target.files && e.target.files[0]);
+            const file = e.target.files ? e.target.files[0] : null;
+
+            dispatch({ type: "update_image", payload: { file } });
+          }}
+          className="w-full p-0 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 
             file:bg-violet-50 file:px-4 file:py-2 file:text-sm file:font-semibold 
             file:text-violet-700 hover:file:bg-violet-100"
-            title="image"
-            name="image"
-            accept="image/avif, image/jpeg, image/png, image/webp"
-            required
-          />
-        </label>
-        {errors.image && (
-          <p className="text-sm text-red-600 first-letter:uppercase">
-            {errors.image.msg}
-          </p>
-        )}
+          title="image"
+          name="image"
+          accept="image/avif, image/jpeg, image/png, image/webp"
+          required
+        />
+      </label>
+      {state.errors.image && (
+        <p className="text-sm text-red-600 first-letter:uppercase">
+          {state.errors.image}
+        </p>
+      )}
 
-        <div className="mt-4 flex flex-col gap-4">
-          <div className="ml-auto flex gap-2 text-sm">
+      <div className="mt-4 flex flex-col gap-4">
+        <div className="ml-auto flex gap-2 text-sm">
+          {operation === "EDIT" && (
             <button className="bg-transparent" onClick={closeModal}>
               Cancel
             </button>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="inline-flex items-center border-0 bg-red-800 font-semibold transition ease-in-out hover:bg-red-900 disabled:opacity-80"
-            >
-              {isLoading && <CircleSpinner />}
-              Save
-            </button>
-          </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="inline-flex items-center border-0 bg-red-800 font-semibold transition ease-in-out hover:bg-red-900 disabled:opacity-80"
+          >
+            {isLoading && <CircleSpinner />}
+            {operation === "EDIT" ? "Save" : "Create"}
+          </button>
         </div>
       </div>
     </form>

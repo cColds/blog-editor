@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 import BlogType from "../types/Blog";
-import BlogForm from "./BlogForm";
+import EditBlog from "./EditBlog";
 
 type EditModalType = {
   isModalOpen: boolean;
@@ -31,7 +31,7 @@ function EditModal({
         <h1 className="">Edit Blog</h1>
       </header>
 
-      <BlogForm
+      <EditBlog
         closeModal={closeModal}
         targetBlog={targetBlog}
         fetchBlogs={fetchBlogs}
