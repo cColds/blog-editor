@@ -24,7 +24,7 @@ function Nav() {
               <Link to="/blogs">Blogs</Link>
             </li>
             <li>
-              <Link to="/new-blog">New Blog</Link>
+              <Link to="/create-blog">Create Blog</Link>
             </li>
           </>
         ) : (

@@ -6,7 +6,7 @@ import Modal from "react-modal";
 import axios from "axios";
 import checkAuth from "../utils/checkAuth";
 import BlogType from "../types/Blog";
-import Blog from "../components/Blog";
+import BlogCard from "../components/BlogCard";
 import DeleteModal from "../components/DeleteModal";
 import EditModal from "../components/EditModal";
 import Loading from "../components/Loading";
@@ -92,16 +92,19 @@ function Blogs() {
     <div className="flex w-full max-w-7xl flex-col p-8">
       <div className="mb-6 flex items-baseline gap-5">
         <h1 className="text-3xl font-bold">Blogs</h1>
-        <Link to="/new-blog" className="inline-flex items-center gap-2 text-xl">
+        <Link
+          to="/create-blog"
+          className="inline-flex items-center gap-2 text-xl"
+        >
           <FontAwesomeIcon icon={faPenToSquare} />
-          New Blog
+          Create Blog
         </Link>
       </div>
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
         {blogs.map((blog) => {
           return (
-            <Blog
+            <BlogCard
               key={blog._id}
               blog={blog}
               onOpenDeleteModal={openDeleteModal}

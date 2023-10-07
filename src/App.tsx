@@ -3,7 +3,7 @@ import "./App.css";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import Blogs from "./pages/Blogs";
-import NewBlog from "./pages/NewBlog";
+import CreateBlog from "./pages/CreateBlog";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Nav from "./components/Nav";
@@ -18,7 +18,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Auth />} />
           <Route path="/blogs" element={<Blogs />} />
-          <Route path="/new-blog" element={<NewBlog />} />
+          <Route path="/create-blog" element={<CreateBlog />} />
         </Routes>
       </main>
 

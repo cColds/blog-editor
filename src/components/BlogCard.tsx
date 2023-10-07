@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import BlogType from "../types/Blog";
 
-function Blog({
+function BlogCard({
   blog,
   onOpenDeleteModal,
   onOpenEditModal,
@@ -56,4 +56,4 @@ function Blog({
   );
 }
 
-export default Blog;
+export default BlogCard;

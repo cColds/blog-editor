@@ -7,7 +7,7 @@ import BlogForm from "../components/BlogForm";
 import blogFormReducer from "../reducers/blogFormReducer";
 import notifyToast from "../utils/notifyToast";
 
-function NewBlog() {
+function CreateBlog() {
   const [state, dispatch] = useReducer(blogFormReducer, {
     title: "",
     body: "",
@@ -65,7 +65,7 @@ function NewBlog() {
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="mb-6 text-3xl">New Blog</h1>
+      <h1 className="mb-6 text-3xl">Create Blog</h1>
       <BlogForm
         handleSubmit={handleSubmit}
         isLoading={loading}
@@ -77,4 +77,4 @@ function NewBlog() {
   );
 }
 
-export default NewBlog;
+export default CreateBlog;
