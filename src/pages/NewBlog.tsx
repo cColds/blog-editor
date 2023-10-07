@@ -3,8 +3,8 @@ import checkAuth from "../utils/checkAuth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SubmitFormError from "../types/SubmitFormError";
-import BlogForm from "./BlogForm";
-import blogFormReducer from "./reducers/blogFormReducer";
+import BlogForm from "../components/BlogForm";
+import blogFormReducer from "../reducers/blogFormReducer";
 import notifyToast from "../utils/notifyToast";
 
 function NewBlog() {

@@ -1,4 +1,4 @@
-import BlogFormAction from "../../types/BlogFormAction";
+import BlogFormAction from "../types/BlogFormAction";
 
 type BlogFormState = {
   title: string;

@@ -2,7 +2,7 @@ import { useReducer, useState } from "react";
 import axios from "axios";
 import BlogType from "../types/Blog";
 import notifyToast from "../utils/notifyToast";
-import blogFormReducer from "./reducers/blogFormReducer";
+import blogFormReducer from "../reducers/blogFormReducer";
 import SubmitFormError from "../types/SubmitFormError";
 import BlogForm from "./BlogForm";
 

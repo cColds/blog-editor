@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import checkAuth from "../utils/checkAuth";
 import axios from "axios";
+import checkAuth from "../utils/checkAuth";
 
 type User = {
   username: string;
@@ -9,13 +9,14 @@ type User = {
 };
 
 function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+
   const [user, setUser] = useState<User | null>(null);
 
   const getUser = async () => {
     const token = localStorage.getItem("token");
-    const cachedUser = localStorage.getItem("username") || "";
-    const query = new URLSearchParams({ username: cachedUser });
+    const storedUser = localStorage.getItem("username") || "";
+    const query = new URLSearchParams({ username: storedUser });
 
     const res = await axios.get("http://localhost:3000/api/user?" + query, {
       headers: { authorization: `Bearer ${token}` },
@@ -30,10 +31,10 @@ function Home() {
       const authStatus = await checkAuth();
       if (!authStatus) return;
 
-      setIsLoggedIn(authStatus);
+      setLoggedIn(authStatus);
       setUser(await getUser());
     })();
-  }, []);
+  }, [loggedIn]);
 
   return (
     <div>
@@ -41,10 +42,10 @@ function Home() {
         Blog editor for admins to manage blogs.
       </h1>
       <h2 className="mt-4 text-2xl">
-        {isLoggedIn ? `Welcome, ${user?.username}!` : "You are not logged in"}
+        {loggedIn ? `Welcome, ${user?.username}!` : "You are not logged in"}
       </h2>
 
-      {isLoggedIn && <Link to="/blogs">View blogs</Link>}
+      {loggedIn && <Link to="/blogs">View blogs</Link>}
     </div>
   );
 }

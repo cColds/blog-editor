@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import Auth from "./components/Auth";
-import Home from "./components/Home";
-import Blogs from "./components/Blogs";
-import NewBlog from "./components/NewBlog";
+import Auth from "./pages/Auth";
+import Home from "./pages/Home";
+import Blogs from "./pages/Blogs";
+import NewBlog from "./pages/NewBlog";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Nav from "./components/Nav";
@@ -45,6 +45,5 @@ export default App;
 - Add loading spinner when fetching all blogs
 - Add delete comment
 - Replace body text with a rich text editor like TinyMCE or TipTap
-- Modularize code into different folders
 
 */

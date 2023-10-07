@@ -4,10 +4,9 @@ import Modal from "react-modal";
 import checkAuth from "../utils/checkAuth";
 import axios from "axios";
 import BlogType from "../types/Blog";
-import Blog from "./Blog";
-import DeleteModal from "./DeleteModal";
-import EditModal from "./EditModal";
-import notifyToast from "../utils/notifyToast";
+import Blog from "../components/Blog";
+import DeleteModal from "../components/DeleteModal";
+import EditModal from "../components/EditModal";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -36,30 +35,8 @@ function Blogs() {
   const [targetBlog, setTargetBlog] = useState<BlogType | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   const navigate = useNavigate();
-
-  const handleDeleteBlog = async () => {
-    const blogId = targetBlog?._id || "";
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: { authorization: `Bearer ${token}` },
-    };
-
-    try {
-      const res = await axios.delete(
-        "http://localhost:3000/api/blogs/" + blogId,
-        config,
-      );
-      notifyToast("Deleted blog successfully", "success");
-
-      console.log(res.data);
-    } catch (err) {
-      if (err instanceof Error) {
-        notifyToast(err.message, "error");
-      }
-      console.error(err);
-    }
-  };
 
   const openDeleteModal = (blog: BlogType) => {
     setIsDeleteModalOpen(true);
@@ -129,7 +106,6 @@ function Blogs() {
         <DeleteModal
           isModalOpen={isDeleteModalOpen}
           closeModal={closeDeleteModal}
-          onDeleteBlog={handleDeleteBlog}
           targetBlog={targetBlog}
           customStyles={customStyles}
           fetchBlogs={fetchBlogs}
