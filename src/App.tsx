@@ -42,8 +42,8 @@ export default App;
 
 // TODO:
 /*
-- Add loading spinner when fetching all blogs
 - Add delete comment
 - Replace body text with a rich text editor like TinyMCE or TipTap
+- Add view blog
 
 */

@@ -1,14 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "react-modal";
-import checkAuth from "../utils/checkAuth";
 import axios from "axios";
+import checkAuth from "../utils/checkAuth";
 import BlogType from "../types/Blog";
 import Blog from "../components/Blog";
 import DeleteModal from "../components/DeleteModal";
 import EditModal from "../components/EditModal";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loading from "../components/Loading";
 
 const customStyles = {
   overlay: { backgroundColor: "rgba(0, 0, 0, 0.3)" },
@@ -35,6 +36,7 @@ function Blogs() {
   const [targetBlog, setTargetBlog] = useState<BlogType | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -59,12 +61,16 @@ function Blogs() {
   };
 
   const fetchBlogs = useCallback(async () => {
+    setLoading(true);
+
     try {
       const res = await axios.get("http://localhost:3000/api/blogs");
       const allBlogs = res.data;
       setBlogs(allBlogs);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -79,6 +85,8 @@ function Blogs() {
       fetchBlogs();
     })();
   }, [navigate, fetchBlogs]);
+
+  if (loading) return <Loading loading={loading} />;
 
   return (
     <div className="flex w-full max-w-7xl flex-col p-8">
