@@ -40,10 +40,9 @@ function Home() {
       <h1 className="text-3xl font-bold">
         Blog editor for admins to manage blogs.
       </h1>
-      <h2 className="text-2xl mt-4">
+      <h2 className="mt-4 text-2xl">
         {isLoggedIn ? `Welcome, ${user?.username}!` : "You are not logged in"}
       </h2>
-      {!isLoggedIn && <Link to="/login">Login</Link>}
 
       {isLoggedIn && <Link to="/blogs">View blogs</Link>}
     </div>

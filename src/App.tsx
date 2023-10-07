@@ -6,10 +6,13 @@ import Blogs from "./components/Blogs";
 import NewBlog from "./components/NewBlog";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Nav from "./components/Nav";
 
 function App() {
   return (
-    <div>
+    <>
+      <Nav />
+
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -31,7 +34,7 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-    </div>
+    </>
   );
 }
 
@@ -39,7 +42,6 @@ export default App;
 
 // TODO:
 /*
-- Add nav component
 - Add loading spinner when fetching all blogs
 - Add delete comment
 - Replace body text with a rich text editor like TinyMCE or TipTap

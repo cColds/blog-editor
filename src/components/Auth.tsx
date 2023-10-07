@@ -48,10 +48,10 @@ function Auth() {
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-3 p-4 mt-5 items-start"
+        className="mt-5 flex flex-col items-start gap-3 p-4"
       >
         <label
-          className="flex flex-col text-left gap-1.5"
+          className="flex flex-col gap-1.5 text-left"
           htmlFor="username-field"
         >
           Username
@@ -66,7 +66,7 @@ function Auth() {
           />
         </label>
         <label
-          className="flex flex-col text-left gap-1.5"
+          className="flex flex-col gap-1.5 text-left"
           htmlFor="password-field"
         >
           Password
