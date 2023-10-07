@@ -7,18 +7,20 @@ import CreateBlog from "./pages/CreateBlog";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Nav from "./components/Nav";
+import Blog from "./pages/Blog";
 
 function App() {
   return (
     <>
       <Nav />
 
-      <main>
+      <main className="flex h-full flex-col items-center">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Auth />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/create-blog" element={<CreateBlog />} />
+          <Route path="/blogs/:blogId" element={<Blog />} />
         </Routes>
       </main>
 
@@ -44,6 +46,4 @@ export default App;
 /*
 - Add delete comment
 - Replace body text with a rich text editor like TinyMCE or TipTap
-- Add view blog
-
 */
