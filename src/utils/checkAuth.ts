@@ -9,7 +9,7 @@ const checkAuth = async () => {
     const res = await axios.get("http://localhost:3000/api/login", {
       headers: { authorization: `Bearer ${token}` },
     });
-    isLoggedIn = await res.data;
+    isLoggedIn = res.data;
   } catch (e) {
     console.error("Error: ", e);
   }

@@ -42,7 +42,9 @@ function Home() {
         Blog editor for admins to manage blogs.
       </h1>
       <h2 className="mt-4 text-2xl">
-        {loggedIn ? `Welcome, ${user?.username}!` : "You are not logged in"}
+        {loggedIn && user
+          ? `Welcome, ${user.username || "cold"}!`
+          : "You are not logged in"}
       </h2>
 
       {loggedIn && <Link to="/blogs">View blogs</Link>}
