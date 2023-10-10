@@ -12,3 +12,26 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.menu-bar button {
+  color: #000;
+  margin: 0.1rem;
+  border: 1px solid black;
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.4rem;
+  background: white;
+  accent-color: black;
+}
+
+.menu-bar .is-active {
+  background: black;
+  color: #fff;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

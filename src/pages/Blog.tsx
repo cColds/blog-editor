@@ -46,7 +46,10 @@ function Blog() {
             <img src={blog.imgUrl} alt="image" className="aspect-video" />
           </div>
 
-          <p className="mb-8 text-lg">{blog.body}</p>
+          <div
+            className="prose-sm prose-invert my-3 rounded sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none"
+            dangerouslySetInnerHTML={{ __html: blog.body }}
+          />
 
           <Comment blog={blog} fetchBlog={fetchBlog} />
         </article>

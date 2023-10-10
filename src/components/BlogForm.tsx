@@ -1,6 +1,7 @@
 import BlogFormType from "../types/BlogForm";
 import BlogFormAction from "../types/BlogFormAction";
 import CircleSpinner from "./CircleSpinner";
+import Editor from "./Editor";
 
 type BlogFormArgs = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
@@ -47,22 +48,15 @@ function BlogForm({
         </p>
       )}
 
-      <label className="flex flex-col gap-1.5">
-        Body
-        <textarea
-          name="body"
-          placeholder="Once upon a time..."
-          rows={4}
-          value={state.body}
-          onChange={(e) =>
-            dispatch({
-              type: "update_body",
-              payload: { value: e.target.value },
-            })
-          }
-          required
-        ></textarea>
-      </label>
+      <p>Editor</p>
+      <Editor
+        content={state.body}
+        editable={true}
+        onEditorChange={(data: string) => {
+          dispatch({ type: "update_body", payload: { value: data } });
+        }}
+      />
+
       {state.errors.body && (
         <p className="text-sm text-red-600 first-letter:uppercase">
           {state.errors.body}

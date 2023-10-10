@@ -50,7 +50,11 @@ function BlogCard({
             </span>
           )}
         </div>
-        <p className="line-clamp text-sm text-slate-300">{blog.body}</p>
+
+        <div
+          dangerouslySetInnerHTML={{ __html: blog.body }}
+          className="line-clamp text-sm text-slate-300"
+        />
       </article>
     </div>
   );

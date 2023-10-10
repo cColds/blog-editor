@@ -20,13 +20,12 @@ function CreateBlog() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      const isLoggedIn = await checkAuth();
+    async function redirectIfLoggedOut() {
+      const loggedIn = await checkAuth();
+      if (!loggedIn) navigate("/");
+    }
 
-      if (!isLoggedIn) {
-        navigate("/");
-      }
-    })();
+    redirectIfLoggedOut();
   }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
