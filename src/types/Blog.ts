@@ -3,6 +3,7 @@ type BlogType = {
   imgUrl: string;
   title: string;
   body: string;
+  description: string;
   img: File;
   author: { _id: string; username: string };
   formatDate: string;

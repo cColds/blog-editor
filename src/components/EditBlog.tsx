@@ -17,10 +17,11 @@ function EditBlog({
 }) {
   const [state, dispatch] = useReducer(blogFormReducer, {
     title: targetBlog?.title || "",
+    description: targetBlog?.description || "",
     body: targetBlog?.body || "",
     published: targetBlog?.published || false,
     image: targetBlog?.img || null,
-    errors: { title: "", body: "", image: "" },
+    errors: { title: "", description: "", body: "", image: "" },
   });
   const [loading, setLoading] = useState(false);
 
@@ -34,6 +35,7 @@ function EditBlog({
       const blogId = targetBlog._id;
       const formData = new FormData();
       formData.append("title", state.title);
+      formData.append("description", state.description);
       formData.append("body", state.body);
       formData.append("published", state.published.toString());
       if (state.image) formData.append("image", state.image);

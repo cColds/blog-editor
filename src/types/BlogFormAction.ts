@@ -2,6 +2,7 @@ import SubmitFormError from "./SubmitFormError";
 
 type BlogFormAction =
   | { type: "update_title"; payload: { value: string } }
+  | { type: "update_description"; payload: { value: string } }
   | { type: "update_body"; payload: { value: string } }
   | { type: "toggle_published"; payload: { checked: boolean } }
   | { type: "update_image"; payload: { file: File | null } }

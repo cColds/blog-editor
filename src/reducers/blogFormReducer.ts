@@ -1,20 +1,24 @@
+import BlogFormType from "../types/BlogForm";
 import BlogFormAction from "../types/BlogFormAction";
 
-type BlogFormState = {
-  title: string;
-  body: string;
-  published: boolean;
-  image: File | null;
-  errors: { title: string; body: string; image: string };
-};
-
-const blogFormReducer = (state: BlogFormState, action: BlogFormAction) => {
+const blogFormReducer = (state: BlogFormType, action: BlogFormAction) => {
   switch (action.type) {
     case "update_title": {
       const updatedState = { ...state, title: action.payload.value };
       const errorMsg = action.payload.value ? "" : "Title cannot be empty";
 
       updatedState.errors.title = errorMsg;
+
+      return updatedState;
+    }
+    case "update_description": {
+      const updatedState = { ...state, description: action.payload.value };
+      const errorMsg =
+        action.payload.value.length > 300
+          ? "Description must be 300 characters or fewer"
+          : "";
+
+      updatedState.errors.description = errorMsg;
 
       return updatedState;
     }

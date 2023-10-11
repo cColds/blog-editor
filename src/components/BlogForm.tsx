@@ -48,6 +48,28 @@ function BlogForm({
         </p>
       )}
 
+      <label className="flex flex-col gap-1.5">
+        Description
+        <textarea
+          name="description"
+          rows={5}
+          placeholder="Describe your blog post in 300 characters or fewer"
+          maxLength={300}
+          value={state.description}
+          onChange={(e) =>
+            dispatch({
+              type: "update_description",
+              payload: { value: e.target.value },
+            })
+          }
+        ></textarea>
+      </label>
+      {state.errors.description && (
+        <p className="text-sm text-red-600 first-letter:uppercase">
+          {state.errors.description}
+        </p>
+      )}
+
       <p>Editor</p>
       <Editor
         content={state.body}

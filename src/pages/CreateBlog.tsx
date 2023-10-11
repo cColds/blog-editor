@@ -10,10 +10,11 @@ import notifyToast from "../utils/notifyToast";
 function CreateBlog() {
   const [state, dispatch] = useReducer(blogFormReducer, {
     title: "",
+    description: "",
     body: "",
     published: false,
     image: null,
-    errors: { title: "", body: "", image: "" },
+    errors: { title: "", description: "", body: "", image: "" },
   });
   const [loading, setLoading] = useState(false);
 
@@ -37,6 +38,7 @@ function CreateBlog() {
     try {
       const formData = new FormData();
       formData.append("title", state.title);
+      formData.append("description", state.description);
       formData.append("body", state.body);
       formData.append("published", state.published.toString());
       formData.append("image", state.image || "");

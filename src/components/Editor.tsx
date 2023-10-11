@@ -10,7 +10,7 @@ const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
   TextStyle,
   StarterKit,
-  Placeholder.configure({ placeholder: "Enter something" }),
+  Placeholder.configure({ placeholder: "Tell your story" }),
 ];
 
 type EditorType = {
@@ -27,7 +27,7 @@ const Editor = ({ content, editable, onEditorChange }: EditorType) => {
     editorProps: {
       attributes: {
         class:
-          "min-h-[150px] prose bg-white rounded prose-sm sm:prose-base lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
+          "min-h-[150px] prose bg-white rounded prose-sm sm:prose-base lg:prose-lg xl:prose-2xl p-2.5 focus:outline-none",
       },
     },
     onUpdate: ({ editor }) => {
