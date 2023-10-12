@@ -89,6 +89,7 @@ function Comment({
 
       notifyToast(`Successfully deleted comment`, "success");
       handleCloseModal();
+      fetchBlog();
     } catch (err) {
       if (!axios.isAxiosError(err)) throw err;
 
