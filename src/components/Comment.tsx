@@ -2,6 +2,12 @@ import { useParams } from "react-router-dom";
 import BlogType from "../types/Blog";
 import { useState } from "react";
 import CircleSpinner from "./CircleSpinner";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import DeleteCommentModal from "./DeleteCommentModal";
+import axios from "axios";
+import CommentType from "../types/Comment";
+import notifyToast from "../utils/notifyToast";
 
 function Comment({
   blog,
@@ -16,6 +22,8 @@ function Comment({
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [targetComment, setTargetComment] = useState<null | CommentType>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if (loading) return;
@@ -50,6 +58,42 @@ function Comment({
       setErrorMessage(message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleOpenModal = async (commentId: string) => {
+    const res = await axios.get(
+      `http://localhost:3000/api/blogs/${blogId}/comments/${commentId}`,
+    );
+    setTargetComment(res.data);
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => {
+    setTargetComment(null);
+    setOpenModal(false);
+  };
+
+  const handleDeleteComment = async () => {
+    if (!targetComment) throw Error("Comment doesn't exist");
+
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: { authorization: `Bearer ${token}` },
+      };
+
+      await axios.delete(
+        `http://localhost:3000/api/blogs/${blogId}/comments/${targetComment._id}`,
+        config,
+      );
+
+      notifyToast(`Successfully deleted comment`, "success");
+      handleCloseModal();
+    } catch (err) {
+      if (!axios.isAxiosError(err)) throw err;
+
+      console.error(err);
+      notifyToast(err.message, "error");
     }
   };
 
@@ -118,20 +162,42 @@ function Comment({
             return (
               <li
                 key={comment._id}
-                className="border-b border-slate-400 py-4 last:border-b-0"
+                className="flex justify-between border-b border-slate-400 py-4 last:border-b-0"
               >
                 <div className="mb-2">
                   <p>{comment.name}</p>
                   <p className="text-slate-300" title={comment.formatDateTitle}>
                     {comment.formatDate}
                   </p>
+                  <p className="mt-2 text-lg">{comment.message}</p>
                 </div>
-                <p className="text-lg">{comment.message}</p>
+
+                <div>
+                  <button
+                    className="flex h-10 w-10 items-center justify-center bg-transparent p-2"
+                    onClick={() => handleOpenModal(comment._id)}
+                  >
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      className="h-5 w-5 text-red-600"
+                    />
+                  </button>
+                </div>
               </li>
             );
           })}
         </ul>
       </div>
+
+      {openModal && (
+        <DeleteCommentModal
+          openModal={openModal}
+          closeModal={handleCloseModal}
+          targetComment={targetComment}
+          loading={loading}
+          onDeleteComment={handleDeleteComment}
+        />
+      )}
     </section>
   );
 }
