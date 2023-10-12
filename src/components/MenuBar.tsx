@@ -133,6 +133,17 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       >
         purple
       </button>
+
+      <button
+        onClick={() => {
+          const url = window.prompt("URL");
+          if (!url) return;
+
+          editor.chain().focus().setImage({ src: url }).run();
+        }}
+      >
+        Image
+      </button>
     </div>
   );
 };
