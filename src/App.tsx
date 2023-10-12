@@ -41,9 +41,3 @@ function App() {
 }
 
 export default App;
-
-// TODO:
-/*
-- Add delete comment
-- Replace body text with a rich text editor like TinyMCE or TipTap
-*/
