@@ -5,6 +5,7 @@ import DOMPurify from "dompurify";
 import BlogType from "../types/Blog";
 import Comment from "../components/Comment";
 import Loading from "../components/Loading";
+import axios from "axios";
 
 function Blog() {
   const [blog, setBlog] = useState<BlogType | null>(null);
@@ -15,9 +16,9 @@ function Blog() {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:3000/api/blogs/${blogId}`);
+      const res = await axios.get(`http://localhost:3000/api/blogs/${blogId}`);
 
-      const targetBlog = await res.json();
+      const targetBlog = res.data;
       setBlog(targetBlog);
     } catch (e) {
       console.error(e);
