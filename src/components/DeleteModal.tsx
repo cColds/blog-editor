@@ -32,7 +32,7 @@ function DeleteModal({
 
     try {
       const res = await axios.delete(
-        "http://localhost:3000/api/blogs/" + blogId,
+        `${import.meta.env.VITE_API_URL}/api/blogs/` + blogId,
         config,
       );
       console.log(res.data);

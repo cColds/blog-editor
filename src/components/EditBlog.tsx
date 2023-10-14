@@ -47,7 +47,7 @@ function EditBlog({
       };
 
       await axios.put(
-        "http://localhost:3000/api/blogs/" + blogId,
+        `${import.meta.env.VITE_API_URL}/api/blogs/` + blogId,
         formData,
         config,
       );

@@ -16,7 +16,9 @@ function Blog() {
     setLoading(true);
 
     try {
-      const res = await axios.get(`http://localhost:3000/api/blogs/${blogId}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/blogs/${blogId}`,
+      );
 
       const targetBlog = res.data;
       setBlog(targetBlog);

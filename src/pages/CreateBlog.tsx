@@ -48,7 +48,11 @@ function CreateBlog() {
         headers: { authorization: `Bearer ${token}` },
       };
 
-      await axios.post("http://localhost:3000/api/blogs/", formData, config);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/blogs/`,
+        formData,
+        config,
+      );
       notifyToast("Blog created successfully!", "success");
 
       navigate("/blogs");

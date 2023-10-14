@@ -36,7 +36,7 @@ function Comment({
 
     try {
       await axios.post(
-        `http://localhost:3000/api/blogs/${blogId}/comment`,
+        `${import.meta.env.VITE_API_URL}/api/blogs/${blogId}/comment`,
         data,
       );
 
@@ -58,7 +58,9 @@ function Comment({
 
   const handleOpenModal = async (commentId: string) => {
     const res = await axios.get(
-      `http://localhost:3000/api/blogs/${blogId}/comments/${commentId}`,
+      `${
+        import.meta.env.VITE_API_URL
+      }/api/blogs/${blogId}/comments/${commentId}`,
     );
     setTargetComment(res.data);
     setOpenModal(true);
@@ -78,7 +80,9 @@ function Comment({
       };
 
       await axios.delete(
-        `http://localhost:3000/api/blogs/${blogId}/comments/${targetComment._id}`,
+        `${import.meta.env.VITE_API_URL}/api/blogs/${blogId}/comments/${
+          targetComment._id
+        }`,
         config,
       );
 

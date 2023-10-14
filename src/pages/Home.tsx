@@ -18,9 +18,12 @@ function Home() {
     const storedUser = localStorage.getItem("username") || "";
     const query = new URLSearchParams({ username: storedUser });
 
-    const res = await axios.get("http://localhost:3000/api/user?" + query, {
-      headers: { authorization: `Bearer ${token}` },
-    });
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/user?` + query,
+      {
+        headers: { authorization: `Bearer ${token}` },
+      },
+    );
 
     const userData = await res.data;
     return userData;

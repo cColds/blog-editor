@@ -23,10 +23,13 @@ function Auth() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:3000/api/login", {
-        username,
-        password,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/login`,
+        {
+          username,
+          password,
+        },
+      );
 
       const { token } = await res.data;
       localStorage.setItem("token", token);
